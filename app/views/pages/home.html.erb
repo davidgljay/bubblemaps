@@ -1,0 +1,12 @@
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+<h1>Tag Map</h1>
+
+<div id="viz"></div>
+<%=  trial_run %>
+
+<h2>Import Posts</h2>
+<%= form_tag import_posts_path, multipart: true do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Import" %>
+<% end %>
