@@ -30,7 +30,8 @@ class Map < ActiveRecord::Base
         :name => t.name,
         :size => t.postcount,
         :buzz => t.heat1,
-        :links => t.heat2
+        :links => t.heat2,
+        :related => Tag.topx(200, t.name)
     }
     }
     self.save

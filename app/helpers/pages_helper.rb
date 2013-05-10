@@ -8,12 +8,28 @@ module PagesHelper
 
     var r = 100;
 
-var sampleSVG = d3.select("#viz")
+var SVG = d3.select("#viz")
     .append("svg")
     .attr("width", w)
-    .attr("height", h);
+    .attr("height", h)
+    .attr("pointer-events", "all")
+  .append("svg:g")
+    .call(d3.behavior.zoom().on("zoom", redraw))
+  .append("svg:g");
 
-z = 8;
+SVG.append("svg:rect")
+    .attr("width", w)
+    .attr("height", h)
+    .attr("fill", "white");
+
+function redraw() {
+  console.log("here", d3.event.translate, d3.event.scale);
+  SVG.attr("transform",
+      "translate(" + d3.event.translate + ")"
+      + " scale(" + d3.event.scale + ")");
+}
+
+z = 1;
 
 d3.json("/maps/3", function(dataset) {
 
@@ -36,32 +52,29 @@ var fontSize =  d3.scale.linear()
                      .domain([0, d3.max(dataset, function(d) { return d.size; })/z])
                      .range([0, 35]);
 
-sampleSVG.selectAll("circle")
+SVG.selectAll("circle")
     .data(dataset)
     .enter().append("circle")
-    .style("stroke", "steelblue")
-    .style("fill", "none")
+    .style("fill", "rgba(173, 216, 230, 0.5)")
     .attr("height", 40)
     .attr("width", 75)
+    .attr("class", function(d){return d.name})
     .attr("cx", function(d){return x(d.buzz)})
     .attr("cy", function(d){return y(d.links)})
-    .attr("r",function(d){return radius(d.size)})
-     .transition()
-      .duration(2000)
-      .ease("elastic")
-      .tween("z", function() {
-        var i = d3.interpolate(1, 14);
-        return function(t) { draw(i(t)); };
-      });
+    .attr("r", function(d){return radius(d.size);});
 
-sampleSVG.selectAll("text")
+SVG.selectAll("text")
     .data(dataset)
     .enter().append("text")
     .attr("text-anchor", "middle")
     .attr("font-size", function(d){return fontSize(d.size)})
+    .attr("class", function(d){return d.name})
     .attr("dx", function(d){return x(d.buzz)})
     .attr("dy", function(d){return y(d.links)})
     .text(function(d){return d.name});
+
+
+
 });
 
 
