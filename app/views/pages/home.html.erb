@@ -1,12 +1,33 @@
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<div class="row">
+  <div class="span11">
+    <div class="well">
+    <h2>Explorable, Zoomable Maps of Public Discourse</h2>
+    <p class="lead">
+       Bubblemaps help you see the connections between large topics of discussion and ones just emerging into public view. We help you find the next big thing that no one is talking about.
+    </p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="span11">
+    <div class="thumbnail">
+      <div class="row">
+        <div class="span9 offset1">
+        <h3>StackOverflow</h3>
+        <p>
+         This is a visualization of tags from StackOverflow, a site where people ask and answer questions about code.
+         </p>
+        <ul class="unstyled">
+          <li><strong>Bubble size shows popularity.</strong> It is based on the frequency with which a tag is used.</li>
+          <li><strong>The Y Axis shows centrality.</strong> It is based on the number of other tags the tag appears next to.</li>
+          <li><strong>The X Axis shows what is trending up and what is trending down.</strong> It is based on median post date.</li>
+        </ul>
+      </div>
+      </div>
+      <div id="viz"></div>
+      <%=  trial_run %>
+       <br>
 
-<h1>Tag Map</h1>
-
-<div id="viz"></div>
-<%=  trial_run %>
-
-<h2>Import Posts</h2>
-<%= form_tag import_posts_path, multipart: true do %>
-    <%= file_field_tag :file %>
-    <%= submit_tag "Import" %>
-<% end %>
+    </div>
+  </div>
+</div>
