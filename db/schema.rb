@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130412030141) do
+ActiveRecord::Schema.define(:version => 20130601155613) do
 
   create_table "maps", :force => true do |t|
     t.string   "name"
@@ -27,14 +27,8 @@ ActiveRecord::Schema.define(:version => 20130412030141) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "posts", :force => true do |t|
-    t.datetime "date"
-    t.integer  "heat1"
-    t.integer  "heat2"
-    t.text     "text"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
+# Could not dump table "posts" because of following StandardError
+#   Unknown type 'source' for column 'string'
 
   create_table "tags", :force => true do |t|
     t.string   "name"

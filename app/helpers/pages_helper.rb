@@ -1,9 +1,9 @@
 module PagesHelper
 
-  def trial_run
+  def bubblemap
 
     javascript_tag('
-    var w = 960,
+    var w = 850,
         h = 700
 
     var r = 100;
@@ -13,9 +13,12 @@ var SVG = d3.select("#viz")
     .attr("width", w)
     .attr("height", h)
     .attr("pointer-events", "all")
-  .append("svg:g")
+    .append("svg:g")
     .call(d3.behavior.zoom().on("zoom", redraw))
-  .append("svg:g");
+    .append("svg:g");
+;
+
+
 
 SVG.append("svg:rect")
     .attr("width", w)
@@ -31,15 +34,23 @@ function redraw() {
 
 z = 1;
 
+
 d3.json("/maps/3", function(dataset) {
 
+var xScale = [d3.min(dataset, function(d) { return d.buzz; }), d3.max(dataset, function(d) { return d.buzz; })];
+
+var yScale = [0, d3.max(dataset, function(d) { return d.links; })/z];
+
 var x = d3.scale.linear()
-                     .domain([d3.min(dataset, function(d) { return d.buzz; }), d3.max(dataset, function(d) { return d.buzz; })])
+                     .domain(xScale)
                      .range([50, w-50]);
 
+var ycolor = d3.scale.linear()
+                      .domain(yScale)
+                      .range(["rgb(28, 110, 179)", "rgb(205, 232, 255)"])
 
 var y = d3.scale.linear()
-                     .domain([0, d3.max(dataset, function(d) { return d.links; })/z])
+                     .domain(yScale)
                      .range([h-50, 50]);
 
 
@@ -55,7 +66,7 @@ var fontSize =  d3.scale.linear()
 SVG.selectAll("circle")
     .data(dataset)
     .enter().append("circle")
-    .style("fill", "rgba(173, 216, 230, 0.5)")
+    .style("fill", function(d){return ycolor(d.links)})
     .attr("height", 40)
     .attr("width", 75)
     .attr("class", function(d){return d.name})
@@ -73,8 +84,74 @@ SVG.selectAll("text")
     .attr("dy", function(d){return y(d.links)})
     .text(function(d){return d.name});
 
+SVG.append("g")
+    .attr("id", "xAxis")
+    .append("line")
+      .attr("x1", 0)
+      .attr("y1", h-20)
+      .attr("x2", w)
+      .attr("y2", h-20)
+      .attr("stroke", "black")
+
+SVG.select("#xAxis")
+    .append("text")
+      .attr("dx", 10)
+      .attr("dy", h-25)
+      .attr("fill", "steelblue")
+      .attr("font-size", "14px")
+      .attr("font-weight", "bold")
+      .text("Trending Down");
+
+SVG.select("#xAxis")
+    .append("text")
+      .attr("text-anchor", "end")
+      .attr("dx", w-10)
+      .attr("dy", h-25)
+      .attr("fill", "steelblue")
+      .attr("font-size", "14px")
+      .attr("font-weight", "bold")
+      .text("Trending Up");
 
 
+SVG.append("g")
+    .attr("id", "yAxis")
+    .append("line")
+      .attr("x1", 0)
+      .attr("y1", h-20)
+      .attr("x2", 0)
+      .attr("y2", 20)
+      .attr("stroke", "black")
+
+SVG.select("#yAxis")
+    .append("text")
+      .attr("dx", 10)
+      .attr("dy", h-25)
+      .attr("fill", "steelblue")
+      .attr("font-size", "14px")
+      .attr("font-weight", "bold")
+      .text("Trending Down");
+
+SVG.select("#yAxis")
+    .append("text")
+      .attr("text-anchor", "end")
+      .attr("dx", h-50)
+      .attr("dy", -10)
+      .attr("fill", "steelblue")
+      .attr("font-size", "14px")
+      .attr("font-weight", "bold")
+      .attr("transform", "rotate(90)")
+      .text("Peripheral");
+
+SVG.select("#yAxis")
+    .append("text")
+      .attr("text-anchor", "end")
+      .attr("dx", 70)
+      .attr("dy", -10)
+      .attr("fill", "steelblue")
+      .attr("font-size", "14px")
+      .attr("font-weight", "bold")
+      .attr("transform", "rotate(90)")
+      .text("Central");
 });
 
 

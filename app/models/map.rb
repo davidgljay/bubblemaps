@@ -3,7 +3,7 @@ class Map < ActiveRecord::Base
   serialize :maphash
 
   def sunburst_map
-    self.maphash = Tag.topx(20).map{|t|
+    self.maphash = Tag.topx(20).map
       {
           :name => t[:label],
       :children =>
@@ -14,8 +14,6 @@ class Map < ActiveRecord::Base
         }
       }
       }
-
-    }
     self.save
   end
 
@@ -31,7 +29,7 @@ class Map < ActiveRecord::Base
         :size => t.postcount,
         :buzz => t.heat1,
         :links => t.heat2,
-        :related => Tag.topx(200, t.name)
+       # :related => Tag.topx(200, t.name)
     }
     }
     self.save

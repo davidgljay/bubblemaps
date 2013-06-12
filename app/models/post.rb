@@ -1,6 +1,7 @@
 class Post < ActiveRecord::Base
   require 'csv'
-  attr_accessible :date, :heat1, :heat2, :text
+  attr_accessible :source,:date, :heat1, :heat2, :text
+
   serialize :text
 
   has_many :post_tags, :foreign_key => "post_id", :dependent => :destroy
