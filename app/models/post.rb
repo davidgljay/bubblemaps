@@ -1,5 +1,6 @@
 class Post < ActiveRecord::Base
   require 'csv'
+  require 'open-uri'
   attr_accessible :source,:date, :heat1, :heat2, :text
 
   serialize :text
@@ -12,10 +13,10 @@ class Post < ActiveRecord::Base
     self.import(file.url)
   end
 
-  def self.import(url)
+  def self.import(url, source)
     array = []
-    CSV.foreach(url, headers: true) do |row|
-      p = Post.new(:date => row[1], :text => row[2][1..-2].split('><').to_a)
+    CSV.foreach(open(url), headers: true) do |row|
+      p = Post.new(:date => row[1], :text => row[2][1..-2].split('><').to_a, :source => source)
       array << p
       p.save
     end

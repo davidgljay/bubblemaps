@@ -1,5 +1,5 @@
 class AddSourceToPosts < ActiveRecord::Migration
   def change
-    add_column :posts, :string, :source
+    add_column :posts, :source, :string
   end
 end
