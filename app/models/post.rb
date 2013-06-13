@@ -7,9 +7,14 @@ class Post < ActiveRecord::Base
   has_many :post_tags, :foreign_key => "post_id", :dependent => :destroy
   has_many :tags, :through => :post_tags, :source => :tag
 
-  def self.import(file)
+
+  def self.file_import(file)
+    self.import(file.url)
+  end
+
+  def self.import(url)
     array = []
-    CSV.foreach(file.path, headers: true) do |row|
+    CSV.foreach(url, headers: true) do |row|
       p = Post.new(:date => row[1], :text => row[2][1..-2].split('><').to_a)
       array << p
       p.save
