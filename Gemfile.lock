@@ -170,7 +170,6 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
-    upsert (1.2.0)
     workless (1.1.2)
       delayed_job (>= 2.0.7)
       heroku-api
@@ -201,5 +200,4 @@ DEPENDENCIES
   twitter
   uglifier (>= 1.0.3)
   unicorn
-  upsert
   workless (~> 1.1.1)

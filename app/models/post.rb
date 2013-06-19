@@ -1,7 +1,6 @@
 class Post < ActiveRecord::Base
   require 'csv'
   require 'open-uri'
-  require 'upsert/active_record_upsert'
   require 'nokogiri'
   attr_accessible :source,:date, :heat1, :heat2, :text, :authorhash
 
@@ -67,7 +66,7 @@ class Post < ActiveRecord::Base
           p = Post.create(:date => headline[:date], :text => headline[:text], :source => source, :authorhash => headline[:authorhash])
           posts << p
           headline[:tags].each do |t|
-            tag = Tag.where("name = #{t.inspect} AND source = '#{source}'").first_or_create(:name => t, :source => source)
+            tag = Tag.where("name = #{ActiveRecord::Base::sanitize(t)} AND source = '#{source}'").first_or_create(:name => t, :source => source)
             p.tags << tag
           end
         end

@@ -8,7 +8,6 @@ gem 'rails', '3.2.8'
 group :development do
   gem 'sqlite3'
   gem 'foreman'
-  gem 'unicorn'
 
   gem 'rspec'
   gem 'factory_girl_rails'
@@ -16,7 +15,7 @@ end
 
 group :test do
   gem 'sqlite3'
-  gem 'unicorn'
+
   gem 'rspec'
   gem 'factory_girl_rails'
 end
@@ -41,11 +40,10 @@ gem 'jquery-rails'
 
 gem 'delayed_job'
 gem 'delayed_job_active_record'
-gem 'upsert'
 gem 'nokogiri'
 gem 'tweetstream'
 gem 'twitter'
-
+gem 'unicorn'
 gem "workless", "~> 1.1.1"
 gem 'newrelic_rpm'
 gem 'daemons'
