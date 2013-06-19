@@ -7,6 +7,18 @@ gem 'rails', '3.2.8'
 
 group :development do
   gem 'sqlite3'
+  gem 'foreman'
+  gem 'unicorn'
+
+  gem 'rspec'
+  gem 'factory_girl_rails'
+end
+
+group :test do
+  gem 'sqlite3'
+  gem 'unicorn'
+  gem 'rspec'
+  gem 'factory_girl_rails'
 end
 
 
@@ -31,6 +43,14 @@ gem 'delayed_job'
 gem 'delayed_job_active_record'
 gem 'upsert'
 gem 'nokogiri'
+gem 'tweetstream'
+gem 'twitter'
+
+gem "workless", "~> 1.1.1"
+gem 'newrelic_rpm'
+gem 'daemons'
+gem 'rb-readline', '~> 0.4.2'
+
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

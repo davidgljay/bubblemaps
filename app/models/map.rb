@@ -33,6 +33,22 @@ class Map < ActiveRecord::Base
     }
     }
     self.save
-
   end
+
+  def self.nyt_map
+    nyt = Map.find_or_create_by_name('New York Times Front Page')
+    url = 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'
+    source = 'NYT'
+    xpaths = {:item => '//item', :text => 'title', :date => 'pubDate', :author => 'creator', :tags => 'category'}
+    Post.xml_import(url, source, xpaths)
+    nyt.delay.circle_map(source)
+  end
+
+  def self.twitter_map(term)
+    source = "twitter-#{term}"
+    map = Map.find_or_create_by_name(source)
+    Post.twitter_import(term)
+    map.delay.circle_map(source)
+  end
+
 end
