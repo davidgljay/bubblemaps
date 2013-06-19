@@ -20,7 +20,7 @@ class Post < ActiveRecord::Base
     posts = []
     ActiveRecord::Base.transaction do
       CSV.foreach(open(url), headers: true) do |row|
-        if row[1] > mostrecent
+        if row[1].to_date > mostrecent
           posts << Post.create(:date => row[1], :text => row[2][1..-2].split('><').to_a, :source => source)
         end
       end
