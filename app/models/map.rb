@@ -22,8 +22,8 @@ class Map < ActiveRecord::Base
     self.save
   end
 
-  def circle_map
-    self.maphash = Tag.all.select{|t| t.postcount > 40}.map{|t|
+  def circle_map(source)
+    self.maphash = Tag.where("'source' == '#{source}'").order("'postcount' DESC").first(1000).map{|t|
     {
         :name => t.name,
         :size => t.postcount,

@@ -1,5 +1,5 @@
 class Tag < ActiveRecord::Base
-  attr_accessible :heat1, :heat2, :name, :postcount
+  attr_accessible :heat1, :heat2, :name, :postcount, :source
 
   has_many :post_tags, :foreign_key => "tag_id", :dependent => :destroy
   has_many :posts, :through => :post_tags, :source => :post
@@ -37,7 +37,21 @@ class Tag < ActiveRecord::Base
 
 
   def self.set_all_postcounts
-    Tag.all.each{|t| t.set_postcount}
+    Tag.find_each{|t| t.set_postcount}
+  end
+
+  def self.set_variables
+    ActiveRecord::Base.transaction do
+      Tag.where("postcount IS NULL").find_each do |t|
+        t.set_postcount
+      end
+      Tag.where("heat1 IS NULL").find_each do |t|
+        t.buzz
+      end
+      Tag.where("heat2 IS NULL").find_each do |t|
+        t.links
+      end
+    end
   end
 
   def set_postcount
