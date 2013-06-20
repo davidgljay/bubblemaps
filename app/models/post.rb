@@ -73,7 +73,6 @@ class Post < ActiveRecord::Base
       end
     end
     self.bulk_extract_tags(posts)
-    Tag.set_variables(source)
     posts.count
   end
 
@@ -93,7 +92,6 @@ class Post < ActiveRecord::Base
       end
     end
     #self.bulk_extract_tags(posts)
-    Tag.set_variables(source)
     posts.count
   end
 

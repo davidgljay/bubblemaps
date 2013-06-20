@@ -31,7 +31,6 @@ class Tag < ActiveRecord::Base
         end
       end
     end
-    handle_asynchronously :set_buzz
 
 
     def set_links(source)
@@ -44,7 +43,6 @@ class Tag < ActiveRecord::Base
         end
       end
     end
-    handle_asynchronously :set_links
 
 
 
@@ -53,7 +51,6 @@ class Tag < ActiveRecord::Base
         Tag.where("source = '#{source}'").find_each{|t| t.set_postcount}
       end
     end
-    handle_asynchronously :set_postcounts
 
     def set_variables(source)
       set_postcounts(source)

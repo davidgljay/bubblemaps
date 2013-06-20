@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130619194429) do
+ActiveRecord::Schema.define(:version => 20130620083912) do
 
   create_table "authors", :force => true do |t|
     t.string   "name"
@@ -42,8 +42,10 @@ ActiveRecord::Schema.define(:version => 20130619194429) do
   create_table "maps", :force => true do |t|
     t.string   "name"
     t.text     "maphash"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.text     "description"
+    t.string   "display_name"
   end
 
   create_table "post_tags", :force => true do |t|

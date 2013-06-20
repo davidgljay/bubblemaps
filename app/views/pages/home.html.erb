@@ -17,16 +17,17 @@
         <p>
          This is a visualization of tags from StackOverflow, a site where people ask and answer questions about code.
          </p>
-        <ul class="unstyled">
+          <div id="viz"></div>
+          <%=  bubblemap(3) %>
+          <br>
+
+          <ul class="unstyled">
           <li><strong>Bubble size shows popularity.</strong> It is based on the frequency with which a tag is used.</li>
           <li><strong>The Y Axis shows centrality.</strong> It is based on the number of other tags the tag appears next to.</li>
           <li><strong>The X Axis shows what is trending up and what is trending down.</strong> It is based on median post date.</li>
         </ul>
       </div>
       </div>
-      <div id="viz"></div>
-      <%=  bubblemap %>
-       <br>
 
     </div>
   </div>
