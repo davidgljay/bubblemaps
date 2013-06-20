@@ -3,11 +3,15 @@
     <div class="navbar-innner">
       <a class="brand" href="/">BubbleMaps</a>
       <ul class="nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="/maps/8">New York Times</a></li>
-        <li><a href="/maps/5">Twitter</a></li>
-        <li><a href="/maps/3">Programming</a></li>
-        <li><a href="#">Biology</a></li>
+        <li><a href="/" id="home">Home</a></li>
+        <li><a href="/maps/8" id="NYT">New York Times</a></li>
+        <li><a href="/maps/5" id="twitter-whedon">Twitter</a></li>
+        <li><a href="/maps/3" id="stackoverflow">Programming</a></li>
+        <li><a href="#" id="pubmed">Biology</a></li>
       </ul>
     </div>
   </div>
+
+  <script>
+      $("li").find("#<%= @select %>").addClass('active');
+  </script>

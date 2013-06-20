@@ -47,9 +47,12 @@ class Tag < ActiveRecord::Base
 
 
 
-    def set_postcounts(source)
+    def set_postcounts(source, threshold = 2)
       ActiveRecord::Base.transaction do
         Tag.where("source = '#{source}'").find_each{|t| t.set_postcount}
+        if Tag.where("source = '#{source}'").count > 1000
+          Tag.where("source = '#{source}' AND postcount < #{threshold}").find_each{|t| t.destroy}
+        end
       end
     end
 
