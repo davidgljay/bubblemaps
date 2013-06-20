@@ -23,7 +23,7 @@ class Map < ActiveRecord::Base
   end
 
   def circle_map(source)
-    self.maphash = Tag.where("source = '#{source}'").order("'postcount' DESC").first(1000).map{|t|
+    self.maphash = Tag.where("source = '#{source}'").order("postcount DESC").first(1000).map{|t|
     {
         :name => t.name,
         :size => t.postcount,

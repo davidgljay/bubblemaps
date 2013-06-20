@@ -40,7 +40,7 @@
       <file leaf-file-name="map.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/models/map.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="37" selection-start="481" selection-end="481" vertical-scroll-proportion="0.5652174">
+            <state line="25" column="69" selection-start="513" selection-end="513" vertical-scroll-proportion="0.5652174">
               <folding />
             </state>
           </provider>
@@ -861,7 +861,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/models/map.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="37" selection-start="481" selection-end="481" vertical-scroll-proportion="0.5652174">
+        <state line="25" column="69" selection-start="513" selection-end="513" vertical-scroll-proportion="0.5652174">
           <folding />
         </state>
       </provider>
