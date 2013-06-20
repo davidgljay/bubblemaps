@@ -20,6 +20,7 @@ class Tag < ActiveRecord::Base
       end
     end
 
+
     def set_buzz(source)
       first = Post.where("source = '#{source}'").order("date ASC").first.date
       last = Post.where("source = '#{source}'").order("date ASC").last.date

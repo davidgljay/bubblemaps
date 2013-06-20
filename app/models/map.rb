@@ -22,8 +22,8 @@ class Map < ActiveRecord::Base
     self.save
   end
 
-  def circle_map(source,include = 1000)
-    self.maphash = Tag.where("source = '#{source}'").order("postcount DESC").first(include).map{|t|
+  def circle_map(source,include = 1000, threshold = 4)
+    self.maphash = Tag.where("source = '#{source}' AND postcount > '#{threshold}'").order("postcount DESC").first(include).map{|t|
     {
         :name => t.name,
         :size => t.postcount,
@@ -41,7 +41,7 @@ class Map < ActiveRecord::Base
     source = 'NYT'
     xpaths = {:item => '//item', :text => 'title', :date => 'pubDate', :author => 'creator', :tags => 'category'}
     Post.xml_import(url, source, xpaths)
-    nyt.circle_map(source, 100)
+    nyt.circle_map(source, 100, 2)
   end
 
   def self.twitter_map(term)
