@@ -44,10 +44,11 @@ gem 'nokogiri'
 gem 'tweetstream'
 gem 'twitter'
 gem 'unicorn'
-gem "workless", "~> 1.1.1"
+gem 'heroku-api'
 gem 'newrelic_rpm'
 gem 'daemons'
 gem 'rb-readline', '~> 0.4.2'
+gem 'figaro'
 
 
 # To use ActiveModel has_secure_password

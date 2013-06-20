@@ -35,14 +35,6 @@ module Tagmap
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
 
-    # Configure twitter API information
-    Twitter.configure do |config|
-      config.consumer_key       = 'PJBnipKPeQdmzqfZHMq6QA'
-      config.consumer_secret    = 'DGg23anGMHKnc28xrdAQBvTCjHSdfJaL8zcEgHs'
-      config.oauth_token        = '6660572-7BdZOO2zSgmNYXhNJwypFEYhqFu9iA8Wa2iegV5au4'
-      config.oauth_token_secret = 'hqckGEXWODg1ntmL0OQd3s3WXu6OR4eMgGxTXEscU'
-    end
-
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
 
