@@ -1,3 +1,28 @@
 // Place all the styles related to the Posts controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.postText {
+
+  font-weight: bold;
+  margin-top: 5px;
+  padding-top: 5px;
+  margin-bottom: 5px;
+  border-top: solid 1px lightgrey;
+}
+
+.postAuthor {
+  font-size: 9px;
+  margin-left: 10px;
+  line-height: 10px;
+
+}
+
+.postTime {
+  font-size: 9px;
+  margin-left: 10px;
+  font-style: italic;
+  line-height: 10px;
+  text-align: right;
+
+}

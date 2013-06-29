@@ -1,4 +1,6 @@
 Tagmap::Application.routes.draw do
+  get "tags/list_posts"
+
   get "maps/show"
 
   get "posts/import"
@@ -10,7 +12,6 @@ Tagmap::Application.routes.draw do
   end
   resources :maps
   root to: 'pages#home'
-
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

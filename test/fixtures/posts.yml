@@ -1,13 +1,21 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
-  date: 2013-04-10 00:33:16
-  heat1: 1
-  heat2: 1
-  text: MyText
+postone:
+  date: <%= Time.now.to_s %>
+  text: red, blue, yellow, orange
+  source: test
 
-two:
-  date: 2013-04-10 00:33:16
-  heat1: 1
-  heat2: 1
-  text: MyText
+posttwo:
+  date: <%= (Time.now - 1.week).to_s %>
+  text: red, green, yellow, teal, purple, orange
+  source: test
+
+postthree:
+  date: <%= (Time.now - 1.week).to_s %>
+  text: red, green, yellow, teal
+  source: test
+
+postfour:
+  date: <%= (Time.now - 1.week).to_s %>
+  text: red, green, yellow, teal
+  source: test

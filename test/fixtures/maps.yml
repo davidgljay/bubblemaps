@@ -2,8 +2,8 @@
 
 one:
   name: MyString
-  hash: MyText
+  maphash: MyText
 
 two:
   name: MyString
-  hash: MyText
+  maphash: MyText

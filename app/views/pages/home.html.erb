@@ -1,32 +1,25 @@
-<div class="row">
-  <div class="span11">
+<div class="row" xmlns="http://www.w3.org/1999/html">
+  <div class="span12">
     <div class="well">
     <h2>Explorable, Zoomable Maps of Public Discourse</h2>
     <p class="lead">
-       Bubblemaps help you see the connections between large topics of discussion and ones just emerging into public view. We help you find the next big thing that no one is talking about.
+       Bubblemaps help you see quickly see what people are talking about. We make it easy to track discussions across the web and zoom in on the news that you care about.
     </p>
     </div>
   </div>
 </div>
 <div class="row">
-  <div class="span11">
+  <div class="span12">
     <div class="thumbnail">
       <div class="row">
         <div class="span9 offset1">
-        <h3>StackOverflow</h3>
+        <h3>New York Times Front Page</h3>
         <p>
-         This is a visualization of tags from StackOverflow, a site where people ask and answer questions about code.
+         Welcome to BubbleMaps! To get you started, here is a map of topics covered on the homepage of the New York Times.
          </p>
-          <div id="viz"></div>
-          <%=  bubblemap(3) %>
-          <br>
-
-          <ul class="unstyled">
-          <li><strong>Bubble size shows popularity.</strong> It is based on the frequency with which a tag is used.</li>
-          <li><strong>The Y Axis shows centrality.</strong> It is based on the number of other tags the tag appears next to.</li>
-          <li><strong>The X Axis shows what is trending up and what is trending down.</strong> It is based on median post date.</li>
-        </ul>
-      </div>
+          </div>
+        </div>
+       <%=  render 'maps/map', :map => Map.find_by_name('NYT') %>
       </div>
 
     </div>

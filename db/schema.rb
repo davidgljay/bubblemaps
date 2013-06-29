@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130620083912) do
+ActiveRecord::Schema.define(:version => 20130627200626) do
 
   create_table "authors", :force => true do |t|
     t.string   "name"
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(:version => 20130620083912) do
     t.datetime "date"
     t.integer  "author_id"
     t.text     "authorhash"
+    t.string   "url"
   end
 
   add_index "posts", ["source"], :name => "index_posts_on_source"

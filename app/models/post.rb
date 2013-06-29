@@ -2,7 +2,7 @@ class Post < ActiveRecord::Base
   require 'csv'
   require 'open-uri'
   require 'nokogiri'
-  attr_accessible :source,:date, :heat1, :heat2, :text, :authorhash
+  attr_accessible :source,:date, :heat1, :heat2, :text, :authorhash, :url
 
   serialize :text
   serialize :authorhash
@@ -23,7 +23,7 @@ class Post < ActiveRecord::Base
     mostrecent = mostrecent(source)
     posts = []
     ActiveRecord::Base.transaction do
-      CSV.foreach(open(url), headers: true) do |row|
+      CSV.new(open(url).read, :headers => true).each do |row|
         if row[1].to_datetime > mostrecent
           posts << Post.create(:date => row[1], :text => row[2][1..-2].split('><').to_a, :source => source)
         end
@@ -38,7 +38,7 @@ class Post < ActiveRecord::Base
   def self.nyt_import
     url = 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'
     source = 'NYT'
-    xpaths = {:item => '//item', :text => 'title', :date => 'pubDate', :author => 'creator', :tags => 'category'}
+    xpaths = {:item => '//item', :text => 'title', :date => 'pubDate', :author => 'creator', :tags => 'category', :url => 'link'}
     self.xml_import(url, source, xpaths)
   end
 
@@ -55,31 +55,33 @@ class Post < ActiveRecord::Base
       text = headline.xpath(xpaths[:text]).text
       date = headline.xpath(xpaths[:date]).text.to_datetime
       author = headline.xpath(xpaths[:author]).text
+      postUrl = headline.xpath(xpaths[:url]).text
       tags = headline.xpath(xpaths[:tags]).map {|t| t.text}
 
-      headlines << {:text => text, :date => date, :authorhash => {:name => author}, :tags => tags}
+      headlines << {:text => text, :date => date, :authorhash => {:name => author}, :tags => tags, :url => postUrl}
     end
     posts = []
     ActiveRecord::Base.transaction do
       headlines.each do |headline|
         if headline[:date] > mostrecent
-          p = Post.create(:date => headline[:date], :text => headline[:text], :source => source, :authorhash => headline[:authorhash])
+          p = Post.create(:date => headline[:date], :text => headline[:text], :source => source, :authorhash => headline[:authorhash], :url => headline[:url])
           posts << p
           headline[:tags].each do |t|
             tag = Tag.where("name = #{ActiveRecord::Base::sanitize(t)} AND source = '#{source}'").first_or_create(:name => t, :source => source)
             p.tags << tag
+            tag.save
           end
         end
       end
     end
     #self.bulk_extract_tags(posts)
-    Tag.set_variables(source)
     posts.count
   end
 
   #Import tweets from twitter based on a search term
 
-  def self.twitter_import(term)
+  def self.twitter_import(source)
+    term = source.first(8) == 'twitter-' ? source[8..-1] : source
     results = Twitter.search(term, :lang => 'en', :count => 100).results
     source = "twitter-#{term}"
     mostrecent = mostrecent(source)
@@ -88,12 +90,11 @@ class Post < ActiveRecord::Base
       results.each do |tweet|
         if tweet.created_at > mostrecent
           author = tweet.user
-          posts << Post.create(:date => tweet.created_at, :text => tweet.text, :source => source, :authorhash => {:name => author.name, :screen_name => author.screen_name, :location => author.location, :description => author.description, :profile_image => author.profile_image_url})
+          posts << Post.create(:date => tweet.created_at, :text => tweet.text, :source => source, :authorhash => {:name => author.name, :screen_name => author.screen_name, :location => author.location, :description => author.description, :profile_image => author.profile_image_url, :url => author.url})
         end
       end
     end
     self.bulk_extract_tags(posts)
-    Tag.set_variables(source)
     posts.count
   end
 
@@ -103,9 +104,11 @@ class Post < ActiveRecord::Base
 
   def self.bulk_extract_tags(posts)
     ActiveRecord::Base.transaction do
+      tags_array = []
       posts.each do |p|
-        p.extract_tags
+        tags_array << p.extract_tags
       end
+      tags_array.flatten.uniq.each {|t| t.set_variables; t.save;}
     end
 
   end
@@ -113,23 +116,25 @@ class Post < ActiveRecord::Base
 
 
   def extract_tags
+    tags_array = []
     if text.class == Array
       text.each do |t|
         tag = Tag.find_or_create_by_name(t.downcase)
         self.tags << tag unless self.tags.include?(tag)
         tag.source = self.source
-        tag.save
+        tags_array << tag
       end
     elsif text.class == String
       text.gsub(/[^0-9a-z\- ]/i, '').split(' ').each do |t|
         unless ignore.include?(t.downcase)
           tag = Tag.where("name = '#{t}'").first_or_create(:name => t, :source => self.source)
           self.tags = (self.tags +  [tag]).uniq
+          tags_array << tag
         end
       end
     end
     self.save
-    self.tags
+    tags_array
   end
 
   #Determine the most recent post for a given source
@@ -149,4 +154,11 @@ class Post < ActiveRecord::Base
     ["the", "be", "is", "and", "of", "a", "in", "to", "have", "to", "it", "i", "that", "for", "you", "he", "with", "on", "do", "say", "this", "they", "at", "but", "we", "his", "from", "that", "not", "n't", "n't", "by", "she", "or", "as", "what", "go", "their", "can", "who", "get", "if", "would", "her", "all", "my", "make", "about", "know", "will", "as", "up", "one", "time", "there", "year", "so", "think", "when", "which", "them", "some", "me", "people", "take", "out", "into", "just", "see", "him", "your", "come", "could", "now", "than", "like", "other", "how", "then", "its", "our", "two", "more", "these", "want", "way", "look", "first", "also", "new", "because", "day", "more", "use", "no", "man", "find", "here", "thing", "give", "many", "big", "says", "group", "-", "was", "always", "doing", "Im", "rt", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
   end
 
+  def source_type
+    self.source.split('-').first
+  end
+
+  def self.fromsource(source)
+    Post.where("source = '#{source}'")
+  end
 end

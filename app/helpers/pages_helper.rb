@@ -1,13 +1,16 @@
 module PagesHelper
 
-  def bubblemap(id)
+  def bubblemap(map)
 
     javascript_tag('
-    var w = 850,
-        h = 700
+    var w = 550,
+        h = 450
 
-    var r = 100;
+    var r = 50;
 
+    var fontMax = 18;
+
+    var axisFont = "12px";
 var SVG = d3.select("#viz")
     .append("svg")
     .attr("width", w)
@@ -35,7 +38,7 @@ function redraw() {
 z = 1;
 
 
-d3.json("/maps/' + id.to_s + '.json", function(dataset) {
+d3.json("/maps/' + map.name.to_s + '.json", function(dataset) {
 
 var xScale = [d3.min(dataset, function(d) { return d.buzz; }), d3.max(dataset, function(d) { return d.buzz; })];
 
@@ -61,7 +64,7 @@ var radius = d3.scale.linear()
 
 var fontSize =  d3.scale.linear()
                      .domain([0, d3.max(dataset, function(d) { return d.size; })/z])
-                     .range([0, 35]);
+                     .range([0, fontMax]);
 
 SVG.selectAll("circle")
     .data(dataset)
@@ -76,7 +79,11 @@ SVG.selectAll("circle")
 
 SVG.selectAll("text")
     .data(dataset)
-    .enter().append("text")
+    .enter()
+    .append("svg:a")
+    .attr("xlink:href", function(d){return "/tags/list_posts?name=" + d.name + "&source=' + map.source + '"})
+    .attr("data-remote", "true")
+    .append("text")
     .attr("text-anchor", "middle")
     .attr("font-size", function(d){return fontSize(d.size)})
     .attr("class", function(d){return d.name})
@@ -98,7 +105,7 @@ SVG.select("#xAxis")
       .attr("dx", 10)
       .attr("dy", h-25)
       .attr("fill", "steelblue")
-      .attr("font-size", "14px")
+      .attr("font-size", axisFont)
       .attr("font-weight", "bold")
       .text("Trending Down");
 
@@ -108,7 +115,7 @@ SVG.select("#xAxis")
       .attr("dx", w-10)
       .attr("dy", h-25)
       .attr("fill", "steelblue")
-      .attr("font-size", "14px")
+      .attr("font-size", axisFont)
       .attr("font-weight", "bold")
       .text("Trending Up");
 
@@ -122,14 +129,6 @@ SVG.append("g")
       .attr("y2", 20)
       .attr("stroke", "black")
 
-SVG.select("#yAxis")
-    .append("text")
-      .attr("dx", 10)
-      .attr("dy", h-25)
-      .attr("fill", "steelblue")
-      .attr("font-size", "14px")
-      .attr("font-weight", "bold")
-      .text("Trending Down");
 
 SVG.select("#yAxis")
     .append("text")
@@ -137,7 +136,7 @@ SVG.select("#yAxis")
       .attr("dx", h-50)
       .attr("dy", -10)
       .attr("fill", "steelblue")
-      .attr("font-size", "14px")
+      .attr("font-size", axisFont)
       .attr("font-weight", "bold")
       .attr("transform", "rotate(90)")
       .text("Peripheral");
@@ -148,7 +147,7 @@ SVG.select("#yAxis")
       .attr("dx", 70)
       .attr("dy", -10)
       .attr("fill", "steelblue")
-      .attr("font-size", "14px")
+      .attr("font-size", axisFont)
       .attr("font-weight", "bold")
       .attr("transform", "rotate(90)")
       .text("Central");

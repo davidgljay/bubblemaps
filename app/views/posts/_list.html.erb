@@ -1,0 +1,28 @@
+<% @posts.each do |p| %>
+    <div class='span4'>
+      <div class='row postText'>
+        <div>
+        <% if p.url %>
+            <%=  link_to p.text, p.url, :target => '_blank' %>
+        <% else %>
+           <%=  p.text %>
+        <% end %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class='span2   postAuthor'>
+          <% if @source_type == 'NYT' %>
+            <%= render '/posts/xml_author', :author => p.authorhash %>
+          <% elsif @source_type =='twitter' %>
+            <%=  render '/posts/twitter_author', :author => p.authorhash %>
+          <% end %>
+        </div>
+
+        <div class='postTime span2'>
+          <%= p.date.strftime('%l:%M %p on %a %B %d, %Y') %>
+        </div>
+      </div>
+
+    </div>
+<% end %>

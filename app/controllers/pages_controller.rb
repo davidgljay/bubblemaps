@@ -1,5 +1,8 @@
 class PagesController < ApplicationController
   def home
-    @title = 'A cool place to explore'
+    @title = 'See what all the buzz is about'
+    @map = Map.find_by_name('NYT')
+    @posts = Post.where("source = '#{@map.name}'").first(10)
+    @source_type = @map.source_type
   end
 end

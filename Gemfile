@@ -9,14 +9,14 @@ group :development do
   gem 'sqlite3'
   gem 'foreman'
 
-  gem 'rspec'
+  gem 'rspec-rails'
   gem 'factory_girl_rails'
 end
 
 group :test do
   gem 'sqlite3'
-
-  gem 'rspec'
+  gem 'spork', '~> 0.9.0.rc'
+  gem 'rspec-rails'
   gem 'factory_girl_rails'
 end
 
@@ -49,6 +49,7 @@ gem 'newrelic_rpm'
 gem 'daemons'
 gem 'rb-readline', '~> 0.4.2'
 gem 'figaro'
+gem 'pubmed_search'
 
 
 # To use ActiveModel has_secure_password

@@ -2,7 +2,8 @@ class Tag < ActiveRecord::Base
   attr_accessible :heat1, :heat2, :name, :postcount, :source, :post_id
 
   has_many :post_tags, :foreign_key => "tag_id", :dependent => :destroy
-  has_many :posts, :through => :post_tags, :source => :post
+  has_many :posts, :through => :post_tags, :source => :post, :order => 'date DESC'
+
 
   class << self
     def topx(num = 20, tag = nil, tag2 = nil)
@@ -21,31 +22,6 @@ class Tag < ActiveRecord::Base
     end
 
 
-    def set_buzz(source)
-      first = Post.where("source = '#{source}'").order("date ASC").first.date
-      last = Post.where("source = '#{source}'").order("date ASC").last.date
-      ActiveRecord::Base.transaction do
-        Tag.where("source = '#{source}'").find_each do |t|
-          med = t.posts.map{|p| p.date}.sort{|x,y| y<=>x }[t.posts.count/2]
-          t.heat1 = 1000 - (med.to_time-last).to_f/(first-last).to_f * 1000
-          t.save
-        end
-      end
-    end
-
-
-    def set_links(source)
-      ActiveRecord::Base.transaction do
-        Tag.where("source = '#{source}'").find_each do |t|
-          posts = t.posts.map{|p| p.tags}
-          related = posts.flatten.uniq
-          t.heat2 = (related-[self.name]).count
-          t.save
-        end
-      end
-    end
-
-
 
     def set_postcounts(source, threshold = 2)
       ActiveRecord::Base.transaction do
@@ -56,17 +32,35 @@ class Tag < ActiveRecord::Base
       end
     end
 
-    def set_variables(source)
-      set_postcounts(source)
-      set_links(source)
-      set_buzz(source)
-    end
+  end
 
+  def set_variables
+    self.set_postcount
+    self.set_buzz
+    self.set_links
+    self.save
   end
 
   def set_postcount
     self.postcount = posts.count
-    self.save
+  end
+
+  def set_buzz
+    unless posts.empty?
+      first = Post.where("source = '#{source}'").order("date ASC").first.date
+      last = Post.where("source = '#{source}'").order("date ASC").last.date
+      med = self.posts.map{|p| p.date}.sort{|x,y| y<=>x }[self.posts.count/2]
+      self.heat1 = 1000 - (med.to_time-last).to_f/(first-last).to_f * 1000
+    end
+  end
+
+
+  def set_links
+    unless posts.empty?
+      posts = self.posts.map{|p| p.tags}
+      related = posts.flatten.uniq
+      self.heat2 = (related-[self.name]).count
+    end
   end
 
   def self.clean_ignore
@@ -78,4 +72,11 @@ class Tag < ActiveRecord::Base
     end
   end
 
+  def source_type
+    self.source.split('-').first
+  end
+
+  def self.fromsource(source)
+    Tag.where("source = '#{source}'")
+  end
 end
