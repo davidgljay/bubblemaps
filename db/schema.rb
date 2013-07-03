@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130627200626) do
+ActiveRecord::Schema.define(:version => 20130702224116) do
 
   create_table "authors", :force => true do |t|
     t.string   "name"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20130627200626) do
     t.datetime "updated_at",   :null => false
     t.text     "description"
     t.string   "display_name"
+    t.boolean  "update_me"
   end
 
   create_table "post_tags", :force => true do |t|
@@ -58,12 +59,13 @@ ActiveRecord::Schema.define(:version => 20130627200626) do
   create_table "posts", :force => true do |t|
     t.string   "text"
     t.string   "source"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.datetime "date"
     t.integer  "author_id"
     t.text     "authorhash"
     t.string   "url"
+    t.text     "description"
   end
 
   add_index "posts", ["source"], :name => "index_posts_on_source"

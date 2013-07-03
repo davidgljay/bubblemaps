@@ -10,6 +10,10 @@ module PagesHelper
 
     var fontMax = 18;
 
+    var charge = -30;
+
+    var constraint = 20;
+
     var axisFont = "12px";
 var SVG = d3.select("#viz")
     .append("svg")
@@ -19,8 +23,6 @@ var SVG = d3.select("#viz")
     .append("svg:g")
     .call(d3.behavior.zoom().on("zoom", redraw))
     .append("svg:g");
-;
-
 
 
 SVG.append("svg:rect")
@@ -39,6 +41,7 @@ z = 1;
 
 
 d3.json("/maps/' + map.name.to_s + '.json", function(dataset) {
+
 
 var xScale = [d3.min(dataset, function(d) { return d.buzz; }), d3.max(dataset, function(d) { return d.buzz; })];
 
@@ -66,8 +69,19 @@ var fontSize =  d3.scale.linear()
                      .domain([0, d3.max(dataset, function(d) { return d.size; })/z])
                      .range([0, fontMax]);
 
-SVG.selectAll("circle")
-    .data(dataset)
+var nodes = [];
+
+dataset.forEach(function(d){
+  nodes.push({buzz: d.buzz, links: d.links, size: d.size, name: d.name});
+});
+
+ var force = d3.layout.force()
+     .charge(function(d){return radius(d.size)* charge;})
+     .size([w, h]);
+
+
+var circle = SVG.selectAll("circle")
+    .data(nodes)
     .enter().append("circle")
     .style("fill", function(d){return ycolor(d.links)})
     .attr("height", 40)
@@ -77,8 +91,9 @@ SVG.selectAll("circle")
     .attr("cy", function(d){return y(d.links)})
     .attr("r", function(d){return radius(d.size);});
 
-SVG.selectAll("text")
-    .data(dataset)
+
+var text = SVG.selectAll("text")
+    .data(nodes)
     .enter()
     .append("svg:a")
     .attr("xlink:href", function(d){return "/tags/list_posts?name=" + d.name + "&source=' + map.source + '"})
@@ -87,9 +102,13 @@ SVG.selectAll("text")
     .attr("text-anchor", "middle")
     .attr("font-size", function(d){return fontSize(d.size)})
     .attr("class", function(d){return d.name})
-    .attr("dx", function(d){return x(d.buzz)})
-    .attr("dy", function(d){return y(d.links)})
+    .attr("x", function(d){return x(d.buzz)})
+    .attr("y", function(d){return y(d.links)})
     .text(function(d){return d.name});
+
+   force
+       .nodes(nodes)
+       .start();
 
 SVG.append("g")
     .attr("id", "xAxis")
@@ -102,8 +121,8 @@ SVG.append("g")
 
 SVG.select("#xAxis")
     .append("text")
-      .attr("dx", 10)
-      .attr("dy", h-25)
+      .attr("x", 10)
+      .attr("y", h-25)
       .attr("fill", "steelblue")
       .attr("font-size", axisFont)
       .attr("font-weight", "bold")
@@ -112,8 +131,8 @@ SVG.select("#xAxis")
 SVG.select("#xAxis")
     .append("text")
       .attr("text-anchor", "end")
-      .attr("dx", w-10)
-      .attr("dy", h-25)
+      .attr("x", w-10)
+      .attr("y", h-25)
       .attr("fill", "steelblue")
       .attr("font-size", axisFont)
       .attr("font-weight", "bold")
@@ -133,8 +152,8 @@ SVG.append("g")
 SVG.select("#yAxis")
     .append("text")
       .attr("text-anchor", "end")
-      .attr("dx", h-50)
-      .attr("dy", -10)
+      .attr("x", h-50)
+      .attr("y", -10)
       .attr("fill", "steelblue")
       .attr("font-size", axisFont)
       .attr("font-weight", "bold")
@@ -144,13 +163,24 @@ SVG.select("#yAxis")
 SVG.select("#yAxis")
     .append("text")
       .attr("text-anchor", "end")
-      .attr("dx", 70)
-      .attr("dy", -10)
+      .attr("x", 70)
+      .attr("y", -10)
       .attr("fill", "steelblue")
       .attr("font-size", axisFont)
       .attr("font-weight", "bold")
       .attr("transform", "rotate(90)")
       .text("Central");
+
+
+   force.on("tick", function(nodes) {
+
+     text.attr("x", function(d) { return x(d.buzz ) + d.x/constraint; })
+         .attr("y", function(d) { return y(d.links) + d.y/constraint; });
+
+     circle.attr("cx", function(d) { return x(d.buzz) + d.x/constraint; })
+         .attr("cy", function(d) { return y(d.links) + d.y/constraint; });
+
+    });
 });
 
 
@@ -158,4 +188,11 @@ SVG.select("#yAxis")
 ')
   end
 
+  #
+  #var force = d3.layout.force()
+  #.nodes(d3.values(nodes))
+  #.charge(-30)
+  #.on("tick", tick)
+  #.size([w, h])
+  #.start();
   end

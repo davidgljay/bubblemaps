@@ -4,5 +4,6 @@ class PagesController < ApplicationController
     @map = Map.find_by_name('NYT')
     @posts = Post.where("source = '#{@map.name}'").first(10)
     @source_type = @map.source_type
+    @select = 'home'
   end
 end

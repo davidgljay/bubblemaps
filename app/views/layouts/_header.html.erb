@@ -1,16 +1,18 @@
 
   <div class ="navbar ">
     <div class="navbar-innner">
-      <a class="brand" href="/">BubbleMaps</a>
+      <a class="brand" href="/">
+        <%=  image_tag 'bubblemaps.png', :width => 20, :height => 20 %>
+        BubblMaps</a>
       <ul class="nav">
-        <li><a href="/" id="home">Home</a></li>
-        <li><a href="/maps/NYT" id="NYT">New York Times</a></li>
-        <li><a href="/maps/twitter-whedon" id="twitter-whedon">Twitter</a></li>
-        <li><a href="/maps/pubmed-melinoma" id="pubmed-melinoma">Biology</a></li>
+        <li id="home"><a href="/" >Home</a></li>
+        <li id="NYT"><a href="/maps/NYT" >New York Times</a></li>
+        <li id="twitter-whedon"><a href="/maps/twitter-whedon" >Twitter</a></li>
+        <li id="pubmed-melinoma"><a href="/maps/pubmed-melinoma" >Biology</a></li>
       </ul>
     </div>
   </div>
 
-  <script>
-      $("li").find("#<%= @select %>").addClass('active');
-  </script>
+<%=  javascript_tag do %>
+       var headerSelect = 'li#<%= @select %>';
+  <% end  %>

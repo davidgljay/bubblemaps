@@ -1,11 +1,16 @@
 <div class="row">
-  <div id="viz" class= "span7">
+  <div id="viz" class= "span7 well">
     <%=  bubblemap(map) %>
     <br>
-    <ul class="unstyled">
-      <li><strong>Bubble size shows popularity.</strong> It gets bigger as more articles are posted on a topic.</li>
-      <li><strong>The Y Axis shows centrality.</strong> Bubbles go up as they are cross-posted with a wider range of topics.</li>
-      <li><strong>The X Axis shows trends.</strong> Bubbles move to the right if they are trending up, and move to the left if they are trending down.</li>
+    <dl class="unstyled">
+      <dt>Bubble size shows popularity.</dt>
+      <dd> It gets bigger as more articles are posted on a topic.</dd>
+      <dt>The Y Axis shows centrality.</dt>
+      <dd>Bubbles go up as they are cross-posted with a wider range of topics.</dd>
+      <dt>The X Axis shows trends.</dt>
+      <dd>Bubbles move to the right if they are trending up, and move to the left if they are trending down.</dd>
+      <dt>Bubble location is approximate.</dt>
+      <dd>Bubbles shift around a bit randomly to avoid overlapping.</dd>
     </ul>
   </div>
   <div class="span4" id="posts">

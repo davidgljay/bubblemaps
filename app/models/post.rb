@@ -2,7 +2,7 @@ class Post < ActiveRecord::Base
   require 'csv'
   require 'open-uri'
   require 'nokogiri'
-  attr_accessible :source,:date, :heat1, :heat2, :text, :authorhash, :url
+  attr_accessible :source,:date, :heat1, :heat2, :text, :authorhash, :url, :description
 
   serialize :text
   serialize :authorhash
@@ -61,6 +61,7 @@ class Post < ActiveRecord::Base
       headlines << {:text => text, :date => date, :authorhash => {:name => author}, :tags => tags, :url => postUrl}
     end
     posts = []
+    tags = []
     ActiveRecord::Base.transaction do
       headlines.each do |headline|
         if headline[:date] > mostrecent
@@ -69,20 +70,27 @@ class Post < ActiveRecord::Base
           headline[:tags].each do |t|
             tag = Tag.where("name = #{ActiveRecord::Base::sanitize(t)} AND source = '#{source}'").first_or_create(:name => t, :source => source)
             p.tags << tag
-            tag.save
+            tags << tag
           end
         end
       end
     end
-    #self.bulk_extract_tags(posts)
+    Tag.bulk_set_variables(tags)
     posts.count
   end
 
   #Import tweets from twitter based on a search term
 
-  def self.twitter_import(source)
+  def self.twitter_import(source, pages = 1)
+    results = []
     term = source.first(8) == 'twitter-' ? source[8..-1] : source
-    results = Twitter.search(term, :lang => 'en', :count => 100).results
+    results << Twitter.search(term, :lang => 'en', :count => 100).results
+    maxid = results.flatten.last.id
+    pages.times do
+      results << Twitter.search(term, :lang => 'en', :count => 100, :max_id => maxid).results
+    end
+    results.flatten!
+
     source = "twitter-#{term}"
     mostrecent = mostrecent(source)
     posts = []
@@ -98,6 +106,113 @@ class Post < ActiveRecord::Base
     posts.count
   end
 
+
+  #Import tags from pubmed
+
+  def self.pubmed_import(source, numresults = 5000)
+    term = source.first(7) == 'pubmed-' ? source[7..-1] : source
+    source = "pubmed-#{term}"
+    mostrecent = mostrecent(source)
+    cleanterm = Rack::Utils.escape(term)
+    #Get a list of pubmed IDs for the search terms
+    url1 = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=' + cleanterm + '&retmax=' + numresults.to_s
+    xml1 = Nokogiri::XML(open(url1))
+    if @error
+      @error
+    else
+      pids = xml1.xpath("//IdList/Id").map{|p| p.text}
+      articles = []
+      pids.in_groups_of(200) do |pid_batch|
+        url2 = pids.empty? ? 'http://www.google.com' : 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=' + pid_batch * ',' + '&retmode=xml&rettype=abstract'
+        data = Nokogiri::XML(open(url2).read.strip).remove_namespaces!
+        if @error
+          @error
+        else
+          articles << data.xpath('//PubmedArticle')
+        end
+      end
+      # Get info for those papers from pubmed, no way to avoid the double trip.
+
+
+      papers = []
+      posts = []
+      tags = []
+
+      articles.flatten.each do |article|
+        pmid = article.xpath('MedlineCitation/PMID').text
+        mesh = article.xpath('MedlineCitation/MeshHeadingList/MeshHeading/DescriptorName').map{|c| c.text}
+        keywords =  article.xpath('MedlineCitation/KeywordList/Keyword').map{|c| c.text}
+        terms = mesh + keywords
+        title = article.xpath('MedlineCitation/Article/ArticleTitle').text
+        abstract = article.xpath('MedlineCitation/Article/Abstract/AbstractText').text
+
+        # Capture the publication date
+        day = article.xpath('MedlineCitation/DateCreated/Day').text.to_i
+        month = article.xpath('MedlineCitation/DateCreated/Month').text.to_i
+        year = article.xpath('MedlineCitation/DateCreated/Year').text.to_i
+
+        if year
+          begin
+            pubdate = Time.local(year, month, day)
+          rescue
+            pubdate = Time.local(year)
+          end
+        else
+          pubdate = nil
+        end
+
+        #Capture the list of authors
+        authors = []
+        authorlist = article.xpath('MedlineCitation/Article/AuthorList')
+        authorlist.xpath('Author').each do |a|
+          firstname = a.xpath('ForeName').text
+          lastname = a.xpath('LastName').text
+          authors << {:firstname => firstname, :lastname => lastname, :name => lastname + ', ' + firstname }
+        end
+        if terms
+        papers << {:pubmed_id => pmid, :text => title, :terms => terms, :date => pubdate, :description => abstract, :authorhash => authors}
+        end
+      end
+      #Create a post for each paper
+
+      ActiveRecord::Base.transaction do
+        papers.each do |p|
+          if p[:date] > mostrecent && !p[:terms].empty? &&  p[:date]
+            post = Post.create(:text => p[:text], :date => p[:date], :authorhash => p[:authors], :url => "http://www.ncbi.nlm.nih.gov/pubmed/#{p[:pubmed_id]}", :description => p[:description], :source => source)
+            posts << post
+            p[:terms].each do |t|
+              tag = Tag.where("name = #{ActiveRecord::Base::sanitize(t)} AND source = '#{source}'").first_or_create(:name => t, :source => source)
+              post.tags << tag
+              tags << tag
+
+            end
+          end
+        end
+      end
+
+      Tag.bulk_set_variables(tags)
+      posts.count
+    end
+  end
+
+
+  def display_authors
+    if authorhash.count > 3
+      display_authors = authorhash[0][:lastname] + ', ' + authorhash[-1][:lastname] + ", et al."
+    else
+      display_authors = authorhash.map{|a| a[:lastname]} * ', ' + '.'
+    end
+    display_authors
+  end
+
+
+
+  def scrub(string) #getting wierd intermittent errors from some pubmed into, this should address them.
+    string ||= ''
+    string.gsub(/['\u2029''\u2028']/,'')
+  end
+
+
   #Extract tags from a post
   #Common english words are ignored, otherwise every word is treated as a tag
   #After tags are extracted, Tag.set_variables is run to see if there are tags which need to have their postcounts and heat updated.
@@ -108,9 +223,8 @@ class Post < ActiveRecord::Base
       posts.each do |p|
         tags_array << p.extract_tags
       end
-      tags_array.flatten.uniq.each {|t| t.set_variables; t.save;}
+      Tag.bulk_set_variables(tags_array)
     end
-
   end
 
 

@@ -41,6 +41,12 @@ class Tag < ActiveRecord::Base
     self.save
   end
 
+  def self.bulk_set_variables(tags)
+    ActiveRecord::Base.transaction do
+      tags.flatten.uniq.each {|t| t.set_variables}
+    end
+  end
+
   def set_postcount
     self.postcount = posts.count
   end

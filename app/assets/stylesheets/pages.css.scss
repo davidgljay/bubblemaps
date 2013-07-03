@@ -3,6 +3,10 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 
+a:hover {
+  text-decoration: none;
+}
+
 path {
   stroke: #fff;
   fill-rule: evenodd;

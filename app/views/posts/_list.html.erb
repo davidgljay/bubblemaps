@@ -5,7 +5,7 @@
         <% if p.url %>
             <%=  link_to p.text, p.url, :target => '_blank' %>
         <% else %>
-           <%=  p.text %>
+           <%=  linkify(p.text).html_safe %>
         <% end %>
         </div>
       </div>

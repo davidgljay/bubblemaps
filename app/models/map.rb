@@ -24,7 +24,7 @@ class Map < ActiveRecord::Base
   #  self.save
   #end
 
-  def circle_map(source,include = 100, threshold = 4)
+  def circle_map(source = self.source ,include = 200, threshold = 2)
     self.maphash = Tag.where("source = '#{source}' AND postcount > '#{threshold}'").order("postcount DESC").first(include).map{|t|
       {
           :name => t.name,
@@ -38,13 +38,30 @@ class Map < ActiveRecord::Base
 
   def self.nyt_map
     nyt = Map.find_or_create_by_name('NYT')
-    nyt.update
+    nyt.update_map
+    nyt.update_me = true
+
+    nyt.circle_map(source, 200, 2)
+    nyt.save
+
   end
 
   def self.twitter_map(term)
     source = "twitter-#{term}"
     map = Map.find_or_create_by_name(source)
-    map.update
+    Post.twitter_import(source, 24)
+    map.update_me = true
+    map.circle_map(source, 200, 2)
+    map.save
+  end
+
+  def self.pubmed_map(term)
+   source = "pubmed-#{term}"
+   map = Map.find_or_create_by_name(source)
+   Post.pubmed_import(source, 24)
+   map.update_me = false
+   map.circle_map(source, 200, 2)
+   map.save
   end
 
   def update_map
@@ -54,9 +71,17 @@ class Map < ActiveRecord::Base
       Post.xml_import(url, self.source, xpaths)
     elsif source_type == 'twitter'
       Post.twitter_import(source)
+    elsif source_type == 'pubmed'
+      Post.pubmed_import(source)
     end
-    self.circle_map(source, 100, 2)
+    self.circle_map(source, 200, 2)
     self.save
+  end
+
+  def self.update_all_maps
+    Map.all.each do |m|
+      m.update_map if m.update_me
+    end
   end
 
   def source

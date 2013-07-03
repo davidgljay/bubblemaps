@@ -50,6 +50,8 @@ gem 'daemons'
 gem 'rb-readline', '~> 0.4.2'
 gem 'figaro'
 gem 'pubmed_search'
+gem 'dragonfly'
+gem 'rmagick'
 
 
 # To use ActiveModel has_secure_password

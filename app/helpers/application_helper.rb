@@ -2,7 +2,7 @@ module ApplicationHelper
 
   #Generate a title on a per-page basis
   def title
-    base_title = "Hash Tag"
+    base_title = "Bubblmaps"
     if @title.nil?
       base_title
     else
