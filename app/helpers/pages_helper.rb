@@ -40,7 +40,7 @@ function redraw() {
 z = 1;
 
 
-d3.json("/maps/' + map.name.to_s + '.json", function(dataset) {
+d3.json("/maps/' + map.urlname + '.json", function(dataset) {
 
 
 var xScale = [d3.min(dataset, function(d) { return d.buzz; }), d3.max(dataset, function(d) { return d.buzz; })];
