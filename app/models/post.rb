@@ -87,7 +87,8 @@ class Post < ActiveRecord::Base
     results << Twitter.search(term, :lang => 'en', :count => 100).results
     maxid = results.flatten.last.id
     pages.times do
-      results << Twitter.search(term, :lang => 'en', :count => 100, :max_id => maxid).results
+      results << Twitter.search(term, :lang => 'en', :count => 100, :max_id => maxid - 1).results
+      maxid = results.flatten.last.id
     end
     results.flatten!
 

@@ -45,7 +45,7 @@ d3.json("/maps/' + map.name.to_s + '.json", function(dataset) {
 
 var xScale = [d3.min(dataset, function(d) { return d.buzz; }), d3.max(dataset, function(d) { return d.buzz; })];
 
-var yScale = [0, d3.max(dataset, function(d) { return d.links; })/z];
+var yScale = [0, d3.max(dataset, function(d) { return d.size; })/z];
 
 var x = d3.scale.linear()
                      .domain(xScale)
@@ -83,12 +83,12 @@ dataset.forEach(function(d){
 var circle = SVG.selectAll("circle")
     .data(nodes)
     .enter().append("circle")
-    .style("fill", function(d){return ycolor(d.links)})
+    .style("fill", function(d){return ycolor(d.size)})
     .attr("height", 40)
     .attr("width", 75)
     .attr("class", function(d){return d.name})
     .attr("cx", function(d){return x(d.buzz)})
-    .attr("cy", function(d){return y(d.links)})
+    .attr("cy", function(d){return y(d.size)})
     .attr("r", function(d){return radius(d.size);});
 
 
@@ -103,7 +103,7 @@ var text = SVG.selectAll("text")
     .attr("font-size", function(d){return fontSize(d.size)})
     .attr("class", function(d){return d.name})
     .attr("x", function(d){return x(d.buzz)})
-    .attr("y", function(d){return y(d.links)})
+    .attr("y", function(d){return y(d.size)})
     .text(function(d){return d.name});
 
    force
@@ -175,10 +175,10 @@ SVG.select("#yAxis")
    force.on("tick", function(nodes) {
 
      text.attr("x", function(d) { return x(d.buzz ) + d.x/constraint; })
-         .attr("y", function(d) { return y(d.links) + d.y/constraint; });
+         .attr("y", function(d) { return y(d.size) + d.y/constraint; });
 
      circle.attr("cx", function(d) { return x(d.buzz) + d.x/constraint; })
-         .attr("cy", function(d) { return y(d.links) + d.y/constraint; });
+         .attr("cy", function(d) { return y(d.size) + d.y/constraint; });
 
     });
 });

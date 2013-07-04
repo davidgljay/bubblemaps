@@ -58,7 +58,7 @@ class Map < ActiveRecord::Base
   def self.pubmed_map(term)
    source = "pubmed-#{term}"
    map = Map.find_or_create_by_name(source)
-   Post.pubmed_import(source, 24)
+   Post.pubmed_import(source)
    map.update_me = false
    map.circle_map(source, 200, 2)
    map.save

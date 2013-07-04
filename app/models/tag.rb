@@ -37,7 +37,7 @@ class Tag < ActiveRecord::Base
   def set_variables
     self.set_postcount
     self.set_buzz
-    self.set_links
+    #self.set_links
     self.save
   end
 
@@ -53,8 +53,9 @@ class Tag < ActiveRecord::Base
 
   def set_buzz
     unless posts.empty?
-      first = Post.where("source = '#{source}'").order("date ASC").first.date
-      last = Post.where("source = '#{source}'").order("date ASC").last.date
+      posts = Post.where("source = '#{self.source}'").order("date ASC")
+      first = posts.first.date
+      last = posts.last.date
       med = self.posts.map{|p| p.date}.sort{|x,y| y<=>x }[self.posts.count/2]
       self.heat1 = 1000 - (med.to_time-last).to_f/(first-last).to_f * 1000
     end

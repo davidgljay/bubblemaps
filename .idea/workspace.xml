@@ -37,51 +37,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="_header.html.erb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/layouts/_header.html.erb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="13" selection-start="176" selection-end="176" vertical-scroll-proportion="-3.125">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pages.css.scss" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/assets/stylesheets/pages.css.scss">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="24" selection-start="212" selection-end="212" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="map.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models/map.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="38" selection-start="566" selection-end="566" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_list.html.erb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/posts/_list.html.erb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="38" selection-start="157" selection-end="157" vertical-scroll-proportion="-3.125">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="update.rake" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/tasks/update.rake">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="23" selection-start="88" selection-end="88" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="posts_helper.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/helpers/posts_helper.rb">
           <provider selected="true" editor-type-id="text-editor">
@@ -91,10 +46,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="post.rb" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="post.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models/post.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="193" column="17" selection-start="7409" selection-end="7409" vertical-scroll-proportion="0.8072917">
+            <state line="112" column="50" selection-start="4113" selection-end="4113" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -103,7 +58,52 @@
       <file leaf-file-name="tag.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models/tag.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="43" column="11" selection-start="1331" selection-end="1331" vertical-scroll-proportion="0.0">
+            <state line="38" column="72" selection-start="1279" selection-end="1279" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pages_helper.rb" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/helpers/pages_helper.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="180" column="50" selection-start="4571" selection-end="4571" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="map.rb" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/models/map.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="55" column="51" selection-start="1302" selection-end="1302" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_header.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/.rvm/gems/ruby-1.9.3-p286@global/gems/erubis-2.7.0/benchmark/templates/_header.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="0" selection-start="539" selection-end="539" vertical-scroll-proportion="-6.25">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_list.html.erb" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/views/posts/_list.html.erb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="38" selection-start="157" selection-end="157" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_header.html.erb" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/views/layouts/_header.html.erb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="27" selection-start="431" selection-end="431" vertical-scroll-proportion="0.26548672">
               <folding />
             </state>
           </provider>
@@ -123,23 +123,23 @@
         <option value="$PROJECT_DIR$/app/helpers/posts_helper.rb" />
         <option value="$PROJECT_DIR$/app/views/maps/_map.html.erb" />
         <option value="$PROJECT_DIR$/app/views/posts/_twitter_author.html.erb" />
-        <option value="$PROJECT_DIR$/app/helpers/pages_helper.rb" />
         <option value="$PROJECT_DIR$/app/assets/javascripts/application.js" />
         <option value="$PROJECT_DIR$/app/controllers/pages_controller.rb" />
         <option value="$PROJECT_DIR$/app/assets/javascripts/pages.js.coffee" />
         <option value="$PROJECT_DIR$/lib/tasks/update.rake" />
         <option value="$PROJECT_DIR$/app/assets/stylesheets/pages.css.scss" />
-        <option value="$PROJECT_DIR$/app/models/tag.rb" />
         <option value="$PROJECT_DIR$/app/views/posts/_list.html.erb" />
         <option value="$PROJECT_DIR$/app/helpers/application_helper.rb" />
-        <option value="$PROJECT_DIR$/app/views/layouts/_header.html.erb" />
-        <option value="$PROJECT_DIR$/app/models/map.rb" />
+        <option value="$PROJECT_DIR$/app/helpers/pages_helper.rb" />
         <option value="$PROJECT_DIR$/app/models/post.rb" />
+        <option value="$PROJECT_DIR$/app/models/tag.rb" />
+        <option value="$PROJECT_DIR$/app/models/map.rb" />
+        <option value="$PROJECT_DIR$/app/views/layouts/_header.html.erb" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="65" />
+    <option name="x" value="-1301" />
     <option name="y" value="792" />
     <option name="width" value="1301" />
     <option name="height" value="744" />
@@ -170,7 +170,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="RailsProjectView" />
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -178,45 +177,10 @@
               <option name="myItemId" value="" />
               <option name="myItemType" value="" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="tagmap">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="tagmap">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="app">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="tagmap">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="app">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="helpers">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="RailsProjectView" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -620,11 +584,11 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="options.lastSelected" value="preferences.sourceCode.General" />
     <property name="recentsLimit" value="5" />
-    <property name="GoToClass.includeJavaFiles" value="false" />
-    <property name="options.searchVisible" value="true" />
+    <property name="options.lastSelected" value="preferences.sourceCode.General" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="GoToClass.includeJavaFiles" value="true" />
   </component>
   <component name="RunManager" selected="JavaScript Debug.show.html.erb">
     <configuration default="false" name="IRB console" type="IrbRunConfigurationType" factoryName="IRB console" temporary="true">
@@ -967,14 +931,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="792" width="1301" height="744" extended-state="6" />
+    <frame x="-1301" y="792" width="1301" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35731414" sideWeight="0.6713396" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37809753" sideWeight="0.5669782" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.031484257" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
@@ -1043,19 +1007,9 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/views/posts/_twitter_author.html.erb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="86" selection-start="153" selection-end="153" vertical-scroll-proportion="-0.625" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/favicon.ico">
       <provider selected="true" editor-type-id="images">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/helpers/pages_helper.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="23" selection-start="183" selection-end="183" vertical-scroll-proportion="-6.774194" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/assets/javascripts/application.js">
@@ -1065,30 +1019,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/assets/javascripts/pages.js.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="0" selection-start="229" selection-end="229" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="3" column="0" selection-start="229" selection-end="229" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/maps_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/tasks/update.rake">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="23" selection-start="88" selection-end="88" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/helpers/posts_helper.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="69" selection-start="239" selection-end="239" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="4" column="23" selection-start="88" selection-end="88" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/assets/stylesheets/pages.css.scss">
@@ -1098,16 +1039,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/tag.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="11" selection-start="1331" selection-end="1331" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/posts/_list.html.erb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="38" selection-start="157" selection-end="157" vertical-scroll-proportion="-3.125">
+        <state line="5" column="38" selection-start="157" selection-end="157" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1126,23 +1060,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/layouts/_header.html.erb">
+    <entry file="file://$PROJECT_DIR$/app/helpers/posts_helper.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="13" selection-start="176" selection-end="176" vertical-scroll-proportion="-3.125">
+        <state line="6" column="69" selection-start="239" selection-end="239" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/map.rb">
+    <entry file="file://$PROJECT_DIR$/app/helpers/pages_helper.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="38" selection-start="566" selection-end="566" vertical-scroll-proportion="0.0">
+        <state line="180" column="50" selection-start="4571" selection-end="4571" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/tag.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="72" selection-start="1279" selection-end="1279" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/models/post.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="193" column="17" selection-start="7409" selection-end="7409" vertical-scroll-proportion="0.8072917">
+        <state line="112" column="50" selection-start="4113" selection-end="4113" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/map.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="55" column="51" selection-start="1302" selection-end="1302" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.rvm/gems/ruby-1.9.3-p286@global/gems/erubis-2.7.0/benchmark/templates/_header.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="0" selection-start="539" selection-end="539" vertical-scroll-proportion="-6.25">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/layouts/_header.html.erb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="27" selection-start="431" selection-end="431" vertical-scroll-proportion="0.26548672">
           <folding />
         </state>
       </provider>
