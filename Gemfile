@@ -15,7 +15,7 @@ end
 
 group :test do
   gem 'sqlite3'
-  gem 'spork', '~> 0.9.0.rc'
+  gem 'spork'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
 end

@@ -224,8 +224,8 @@ class Post < ActiveRecord::Base
       posts.each do |p|
         tags_array << p.extract_tags
       end
-      Tag.bulk_set_variables(tags_array)
     end
+    Tag.bulk_set_variables(tags_array)
   end
 
 
