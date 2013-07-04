@@ -52,8 +52,8 @@ class Tag < ActiveRecord::Base
   end
 
   def set_buzz
+    posts = Post.where("source = '#{self.source}'").order("date ASC")
     unless posts.empty?
-      posts = Post.where("source = '#{self.source}'").order("date ASC")
       first = posts.first.date
       last = posts.last.date
       med = self.posts.map{|p| p.date}.sort{|x,y| y<=>x }[self.posts.count/2]
