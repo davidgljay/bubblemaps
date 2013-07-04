@@ -225,7 +225,7 @@ class Post < ActiveRecord::Base
         tags_array << p.extract_tags
       end
     end
-    Tag.bulk_set_variables(tags_array)
+    Tag.bulk_set_variables(tags_array.flatten)
   end
 
 
