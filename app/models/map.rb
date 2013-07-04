@@ -51,6 +51,8 @@ class Map < ActiveRecord::Base
     map = Map.find_or_create_by_name(source)
     Post.twitter_import(source, 24)
     map.update_me = true
+    map.display_name = "#{term} on Twitter"
+    map.urlname = name.gsub(/[^0-9a-z\- ]/i, '').split('-')[1]
     map.circle_map(source, 200, 2)
     map.save
   end
@@ -60,6 +62,8 @@ class Map < ActiveRecord::Base
    map = Map.find_or_create_by_name(source)
    Post.pubmed_import(source)
    map.update_me = false
+   map.display_name = "#{term} on PubMed"
+   map.urlname = name.gsub(/[^0-9a-z\- ]/i, '').split('-')[1]
    map.circle_map(source, 200, 2)
    map.save
   end

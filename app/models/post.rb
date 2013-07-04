@@ -219,8 +219,8 @@ class Post < ActiveRecord::Base
   #After tags are extracted, Tag.set_variables is run to see if there are tags which need to have their postcounts and heat updated.
 
   def self.bulk_extract_tags(posts)
+    tags_array = []
     ActiveRecord::Base.transaction do
-      tags_array = []
       posts.each do |p|
         tags_array << p.extract_tags
       end
@@ -240,7 +240,7 @@ class Post < ActiveRecord::Base
         tags_array << tag
       end
     elsif text.class == String
-      text.gsub(/[^0-9a-z\- ]/i, '').split(' ').each do |t|
+      text.gsub(/[^0-9a-z\- @#]/i, '').split(' ').each do |t|
         unless ignore.include?(t.downcase)
           tag = Tag.where("name = '#{t}'").first_or_create(:name => t, :source => self.source)
           self.tags = (self.tags +  [tag]).uniq

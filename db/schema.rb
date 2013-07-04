@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130702224116) do
+ActiveRecord::Schema.define(:version => 20130704194714) do
 
   create_table "authors", :force => true do |t|
     t.string   "name"
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(:version => 20130702224116) do
     t.text     "description"
     t.string   "display_name"
     t.boolean  "update_me"
+    t.string   "urlname"
   end
 
   create_table "post_tags", :force => true do |t|

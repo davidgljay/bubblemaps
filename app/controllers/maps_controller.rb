@@ -1,7 +1,7 @@
 class MapsController < ApplicationController
   def show
     @select = params[:id]
-    @map = Map.find_by_name(@select)
+    @map = Map.find_by_urlname(@select)
     @posts = Post.where("source = '#{@map.source}'").first(10)
     @source_type = @map.source_type
     @title = @map.display_name
