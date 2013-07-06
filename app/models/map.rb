@@ -4,25 +4,14 @@ class Map < ActiveRecord::Base
 
   validate :name, uniqueness: true, presence: true
 
-  #def sunburst_map
-  #  self.maphash = Tag.topx(20).map
-  #  {
-  #      :name => t[:label],
-  #      :children =>
-  #          Tag.topx(20,t[0]).map{|t2|
-  #            {
-  #                :name => t2[:label],
-  #                :size => t2[:volume]
-  #            }
-  #          }
-  #  }
-  #  self.save
-  #end
-  #
-  #def topx_map
-  #  self.maphash = Tag.topx(20)
-  #  self.save
-  #end
+ def to_csv(include = self.posts.count)
+   CSV.generate do |csv|
+     csv << ["Post Date", "Author", "Text"]
+     posts.each do |post|
+       csv << [post.date, post.authorhash[:screen_name], post.text]
+     end
+   end
+ end
 
   def circle_map(source = self.source ,include = 200, threshold = 2)
     self.maphash = Tag.where("source = '#{source}' AND postcount > '#{threshold}'").order("postcount DESC").first(include).map{|t|
@@ -96,4 +85,7 @@ class Map < ActiveRecord::Base
     self.source.split('-').first
   end
 
+  def posts
+    Post.fromsource(self.name)
+  end
 end

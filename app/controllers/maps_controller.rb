@@ -9,6 +9,7 @@ class MapsController < ApplicationController
       respond_to do |format|
       format.json {render :json => @map.maphash.to_json}
       format.html
+      format.csv {send_data @map.to_csv(2000)}
     end
   end
 end
