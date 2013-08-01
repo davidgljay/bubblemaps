@@ -158,7 +158,7 @@ SVG.select("#yAxis")
       .attr("font-size", axisFont)
       .attr("font-weight", "bold")
       .attr("transform", "rotate(90)")
-      .text("Peripheral");
+      .text("Low Discussion");
 
 SVG.select("#yAxis")
     .append("text")
@@ -169,7 +169,7 @@ SVG.select("#yAxis")
       .attr("font-size", axisFont)
       .attr("font-weight", "bold")
       .attr("transform", "rotate(90)")
-      .text("Central");
+      .text("High Discussion");
 
 
    force.on("tick", function(nodes) {

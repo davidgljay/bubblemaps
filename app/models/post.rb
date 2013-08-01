@@ -2,13 +2,42 @@ class Post < ActiveRecord::Base
   require 'csv'
   require 'open-uri'
   require 'nokogiri'
-  attr_accessible :source,:date, :heat1, :heat2, :text, :authorhash, :url, :description
+  attr_accessible :source,:date, :heat1, :heat2, :text, :authorhash, :url, :description, :taghash
 
   serialize :text
   serialize :authorhash
+  serialize :taghash
 
   has_many :post_tags, :foreign_key => "post_id", :dependent => :destroy
   has_many :tags, :through => :post_tags, :source => :tag
+
+  # Rapgenius sample code
+
+  def self.collatz_chain
+    #longest = {:number => 1, :chain => 1}
+    array = []
+    1000000.times do |i|
+      n = i+1
+      count = 0
+      while n != 1 do
+        if n.odd?
+          n = n * 3 + 1
+        else
+          n = n/2
+        end
+        count += 1
+        if array[n]
+          count = count + array[n-1]
+          n = 1
+        end
+      end
+      array << count
+    end
+    chain = array.sort{|x,y| y <=> x}.first
+    {:number => array.index(chain) + 1, :chain => chain}
+  end
+
+
 
   #Accepts an uploaded CSV file
 
@@ -22,19 +51,18 @@ class Post < ActiveRecord::Base
   def self.csv_import(url, source)
     mostrecent = mostrecent(source)
     posts = []
-    ActiveRecord::Base.transaction do
-      CSV.new(open(url).read, :headers => true).each do |row|
-        if row[1].to_datetime > mostrecent
-          posts << Post.create(:date => row[1], :text => row[2][1..-2].split('><').to_a, :source => source)
-        end
+    CSV.new(open(url).read, :headers => true).each do |row|
+      if row[1].to_datetime > mostrecent
+        posts << {:date => row[1], :text => row[2][1..-2].split('><').to_a, :source => source}
       end
     end
+    posts = Post.create!(posts)
 
     self.bulk_extract_tags(posts)
     posts.count
   end
 
-  #Import front page headlines form the New York Times. This process will be moved to a map.
+#Import front page headlines form the New York Times. This process will be moved to a map.
   def self.nyt_import
     url = 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'
     source = 'NYT'
@@ -42,10 +70,10 @@ class Post < ActiveRecord::Base
     self.xml_import(url, source, xpaths)
   end
 
-  #Import posts from an arbitrary xml file.
-  # URL is the location of the file
-  # Source is a string describing the source, it is used as a unique identifier for data from that source
-  # xpaths is a hash describing the xpath locators of the text, date, and author information
+#Import posts from an arbitrary xml file.
+# URL is the location of the file
+# Source is a string describing the source, it is used as a unique identifier for data from that source
+# xpaths is a hash describing the xpath locators of the text, date, and author information
 
   def self.xml_import(url, source, xpaths)
     headlines = []
@@ -79,9 +107,9 @@ class Post < ActiveRecord::Base
     posts.count
   end
 
-  #Import tweets from twitter based on a search term
+#Import tweets from twitter based on a search term
 
-  def self.twitter_import(source, pages = 1)
+  def self.twitter_import(source, pages = 0)
     results = []
     term = source.first(8) == 'twitter-' ? source[8..-1] : source
     results << Twitter.search(term, :lang => 'en', :count => 100).results
@@ -94,29 +122,36 @@ class Post < ActiveRecord::Base
 
     source = "twitter-#{term}"
     mostrecent = mostrecent(source)
-    posts = []
-    ActiveRecord::Base.transaction do
-      results.each do |tweet|
-        if tweet.created_at > mostrecent
-          author = tweet.user
-          posts << Post.create(:date => tweet.created_at, :text => tweet.text, :source => source, :authorhash => {:name => author.name, :screen_name => author.screen_name, :location => author.location, :description => author.description, :profile_image => author.profile_image_url, :url => author.url})
-        end
+    tweets = []
+    results.each do |tweet|
+      if tweet.created_at > mostrecent
+        author = tweet.user
+        tweets << {:date => tweet.created_at, :text => tweet.text, :source => source, :authorhash => {:name => author.name, :screen_name => author.screen_name, :location => author.location, :description => author.description, :profile_image => author.profile_image_url, :url => author.url}}
       end
     end
-    self.bulk_extract_tags(posts)
+    posts = []
+    ActiveRecord::Base.transaction do
+      posts = Post.create!(tweets)
+    end
     posts.count
   end
 
 
-  #Import tags from pubmed
+#Import tags from pubmed
 
-  def self.pubmed_import(source, numresults = 5000)
+  def self.pubmed_import(source, numresults = 600)
     term = source.first(7) == 'pubmed-' ? source[7..-1] : source
     source = "pubmed-#{term}"
     mostrecent = mostrecent(source)
     cleanterm = Rack::Utils.escape(term)
+    #See if the term is a MESH term
+    url0 = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=mesh&term=' + cleanterm + '&retmax=1'
+    xml0 = Nokogiri::XML(open(url0))
+    mesh = xml0.xpath('//Term').map{|t| t.text}.select{|t| t.include?('MeSH')}.first
+    mesh.gsub!(/[^0-9a-z \[\]]/i, '').gsub!('[MeSH Terms]', '%5BMeSH Terms%5D').gsub!(' ','%20') if mesh
+    mesh ||= cleanterm
     #Get a list of pubmed IDs for the search terms
-    url1 = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=' + cleanterm + '&retmax=' + numresults.to_s
+    url1 = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=' + mesh + '&retmax=' + numresults.to_s
     xml1 = Nokogiri::XML(open(url1))
     if @error
       @error
@@ -137,7 +172,6 @@ class Post < ActiveRecord::Base
 
       papers = []
       posts = []
-      tags = []
 
       articles.flatten.each do |article|
         pmid = article.xpath('MedlineCitation/PMID').text
@@ -171,7 +205,7 @@ class Post < ActiveRecord::Base
           authors << {:firstname => firstname, :lastname => lastname, :name => lastname + ', ' + firstname }
         end
         if terms
-        papers << {:pubmed_id => pmid, :text => title, :terms => terms, :date => pubdate, :description => abstract, :authorhash => authors}
+          papers << {:pubmed_id => pmid, :text => title, :terms => terms, :date => pubdate, :description => abstract, :authorhash => authors}
         end
       end
       #Create a post for each paper
@@ -179,19 +213,11 @@ class Post < ActiveRecord::Base
       ActiveRecord::Base.transaction do
         papers.each do |p|
           if p[:date] > mostrecent && !p[:terms].empty? &&  p[:date]
-            post = Post.create(:text => p[:text], :date => p[:date], :authorhash => p[:authors], :url => "http://www.ncbi.nlm.nih.gov/pubmed/#{p[:pubmed_id]}", :description => p[:description], :source => source)
+            post = Post.create(:text => p[:text], :date => p[:date], :authorhash => p[:authors], :url => "http://www.ncbi.nlm.nih.gov/pubmed/#{p[:pubmed_id]}", :description => p[:description], :source => source, :taghash => p[:terms])
             posts << post
-            p[:terms].each do |t|
-              tag = Tag.where("name = #{ActiveRecord::Base::sanitize(t)} AND source = '#{source}'").first_or_create(:name => t, :source => source)
-              post.tags << tag
-              tags << tag
-
-            end
           end
         end
       end
-
-      Tag.bulk_set_variables(tags)
       posts.count
     end
   end
@@ -214,46 +240,73 @@ class Post < ActiveRecord::Base
   end
 
 
-  #Extract tags from a post
-  #Common english words are ignored, otherwise every word is treated as a tag
-  #After tags are extracted, Tag.set_variables is run to see if there are tags which need to have their postcounts and heat updated.
+#Extract tags from a post
+#Common english words are ignored, otherwise every word is treated as a tag
+#After tags are extracted, Tag.set_variables is run to see if there are tags which need to have their postcounts and heat updated.
+
+#def self.old_bulk_extract_tags(posts)
+#  tags_array = []
+#  ActiveRecord::Base.transaction do
+#    posts.each do |p|
+#      tags_array << p.extract_tags
+#    end
+#  end
+#  Tag.bulk_set_variables(tags_array.flatten)
+#end
 
   def self.bulk_extract_tags(posts)
-    tags_array = []
-    ActiveRecord::Base.transaction do
-      posts.each do |p|
-        tags_array << p.extract_tags
+    tags_hash = {}
+    posts.each do |p|
+
+      text_array = []
+      if p.taghash
+        text_array = p.taghash
+      elsif p.text
+        p.text.gsub(/[^0-9a-z\- @#]/i, '').split(' ').each do |t|
+          unless LISTS['IGNORE'].include?(t.downcase)
+            text_array << t
+          end
+        end
       end
-    end
-    Tag.bulk_set_variables(tags_array.flatten)
-  end
 
-
-
-  def extract_tags
-    tags_array = []
-    if text.class == Array
-      text.each do |t|
-        tag = Tag.find_or_create_by_name(t.downcase)
-        self.tags << tag unless self.tags.include?(tag)
-        tag.source = self.source
-        tags_array << tag
-      end
-    elsif text.class == String
-      text.gsub(/[^0-9a-z\- @#]/i, '').split(' ').each do |t|
-        unless ignore.include?(t.downcase)
-          tag = Tag.where("name = '#{t}'").first_or_create(:name => t, :source => self.source)
-          self.tags = (self.tags +  [tag]).uniq
-          tags_array << tag
+      text_array.each do |word|
+        if tags_hash.keys.include?(word)
+          tags_hash[word][:posts] << p.id
+          tags_hash[word][:postdates] << p.date
+          tags_hash[word][:postcount] = tags_hash[word][:posts].count
+        else
+          tags_hash[word] = {:posts => [p.id], :postdates => [p.date], :postcount => 1}
         end
       end
     end
-    self.save
-    tags_array
+    tags_hash.delete_if{|key, value| value[:postcount] < 2}
   end
 
-  #Determine the most recent post for a given source
-  #Used to avoid creating duplicate posts for the same source
+
+#def extract_tags
+#  tags_array = []
+#  if text.class == Array
+#    text.each do |t|
+#      tag = Tag.where("source = '#{self.source}'").find_or_create_by_name(t.downcase)
+#      self.tags << tag unless self.tags.include?(tag)
+#      tag.source = self.source
+#      tags_array << tag
+#    end
+#  elsif text.class == String
+#    text.gsub(/[^0-9a-z\- @#]/i, '').split(' ').each do |t|
+#      unless ENV['IGNORE'].include?(t.downcase)
+#        tag = Tag.where("name = '#{t}' AND source = '#{self.source}'").first_or_create(:name => t, :source => self.source)
+#        self.tags = (self.tags +  [tag]).uniq
+#        tags_array << tag
+#      end
+#    end
+#  end
+#  self.save
+#  tags_array
+#end
+
+#Determine the most recent post for a given source
+#Used to avoid creating duplicate posts for the same source
 
   def self.mostrecent(source)
     if Post.where("source = '#{source}'").empty?
@@ -263,11 +316,6 @@ class Post < ActiveRecord::Base
     end
   end
 
-  #List of words to ignore
-
-  def ignore
-    ["the", "be", "is", "and", "of", "a", "in", "to", "have", "to", "it", "i", "that", "for", "you", "he", "with", "on", "do", "say", "this", "they", "at", "but", "we", "his", "from", "that", "not", "n't", "n't", "by", "she", "or", "as", "what", "go", "their", "can", "who", "get", "if", "would", "her", "all", "my", "make", "about", "know", "will", "as", "up", "one", "time", "there", "year", "so", "think", "when", "which", "them", "some", "me", "people", "take", "out", "into", "just", "see", "him", "your", "come", "could", "now", "than", "like", "other", "how", "then", "its", "our", "two", "more", "these", "want", "way", "look", "first", "also", "new", "because", "day", "more", "use", "no", "man", "find", "here", "thing", "give", "many", "big", "says", "group", "-", "was", "always", "doing", "Im", "rt", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-  end
 
   def source_type
     self.source.split('-').first
@@ -277,3 +325,4 @@ class Post < ActiveRecord::Base
     Post.where("source = '#{source}'")
   end
 end
+

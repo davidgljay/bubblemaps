@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130704194714) do
+ActiveRecord::Schema.define(:version => 20130801015429) do
 
   create_table "authors", :force => true do |t|
     t.string   "name"
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(:version => 20130704194714) do
     t.string   "display_name"
     t.boolean  "update_me"
     t.string   "urlname"
+    t.text     "taghash"
   end
 
   create_table "post_tags", :force => true do |t|
@@ -67,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20130704194714) do
     t.text     "authorhash"
     t.string   "url"
     t.text     "description"
+    t.text     "taghash"
   end
 
   add_index "posts", ["source"], :name => "index_posts_on_source"
